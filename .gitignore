@@ -1,0 +1,30 @@
+# Environments
+.venv/
+venv/
+ENV/
+env/
+
+# IDEs
+.idea/
+.vscode/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Databases
+vitscan_db.sqlite
+*.db
+
+# Data & Uploads
+static/uploads/predictions/
+static/results/
+static/uploads/datasets/
+static/models/
+dataset/
+
+# Logs
+*.log
+app_output.txt
+install_log.txt

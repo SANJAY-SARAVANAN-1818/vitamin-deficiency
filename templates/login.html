@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Access | VitScan AI</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-blue: #1466f4;
+            --soft-bg: #f4f7fe;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--soft-bg);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .auth-container {
+            background: #fff;
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            overflow: hidden;
+            width: 900px;
+            max-width: 100%;
+            min-height: 550px;
+            display: flex;
+            position: relative;
+        }
+
+        /* Left Side: Illustration & Welcome */
+        .auth-info {
+            background: linear-gradient(135deg, var(--primary-blue), #0a192f);
+            color: white;
+            padding: 50px;
+            width: 40%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            text-align: center;
+        }
+
+        /* Right Side: Forms */
+        .auth-form-section {
+            padding: 50px;
+            width: 60%;
+            background: white;
+        }
+
+        .nav-pills .nav-link {
+            border-radius: 50px;
+            padding: 10px 30px;
+            font-weight: 600;
+            color: #64748b;
+        }
+
+        .nav-pills .nav-link.active {
+            background-color: var(--primary-blue);
+            box-shadow: 0 4px 15px rgba(20, 102, 244, 0.3);
+        }
+
+        .form-control {
+            border-radius: 12px;
+            padding: 12px 15px;
+            border: 1px solid #e2e8f0;
+            background: #f8fafc;
+            margin-bottom: 15px;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-blue);
+            box-shadow: none;
+            background: #fff;
+        }
+
+        .btn-auth {
+            background: var(--primary-blue);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 14px;
+            width: 100%;
+            font-weight: 600;
+            margin-top: 10px;
+            transition: 0.3s;
+        }
+
+        .btn-auth:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(20, 102, 244, 0.2);
+            color: white;
+        }
+
+        .social-login {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-btn {
+            width: 45px;
+            height: 45px;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        .social-btn:hover { background: #f1f5f9; }
+    </style>
+</head>
+<body>
+
+    <div class="auth-container">
+        <div class="auth-info d-none d-md-flex">
+            <h2 class="fw-bold mb-4">Welcome Back!</h2>
+            <p class="mb-5">Access your personalized vitamin analysis and track your health progress over time.</p>
+            <div class="mt-auto">
+                <img src="https://cdn-icons-png.flaticon.com/512/3063/3063176.png" width="180" class="img-fluid" alt="Health Icon">
+            </div>
+        </div>
+
+        <div class="auth-form-section">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h3 class="fw-bold m-0">VitScan AI</h3>
+                <a href="/" class="text-decoration-none small fw-bold">← Home</a>
+            </div>
+
+            <ul class="nav nav-pills mb-4 justify-content-center" id="authTab" role="tablist">
+                <li class="nav-item">
+                    <button class="nav-link active" id="login-tab" data-bs-toggle="pill" data-bs-target="#login" type="button">Login</button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link" id="register-tab" data-bs-toggle="pill" data-bs-target="#register" type="button">Register</button>
+                </li>
+            </ul>
+
+            <div class="tab-content">
+                <div class="tab-pane fade show active" id="login">
+                    <form action="/user_login_process" method="POST">
+                        <label class="small fw-bold text-muted mb-1">Email Address</label>
+                        <input type="email" name="email" class="form-control" placeholder="name@company.com" required>
+
+                        <label class="small fw-bold text-muted mb-1">Password</label>
+                        <input type="password" name="password" class="form-control" placeholder="••••••••" required>
+
+                        <div class="text-end mb-3">
+                            <a href="#" class="small text-decoration-none">Forgot password?</a>
+                        </div>
+
+                        <button type="submit" class="btn-auth">Sign In</button>
+                    </form>
+                </div>
+
+                <div class="tab-pane fade" id="register">
+                    <form action="/user_register_process" method="POST">
+                        <label class="small fw-bold text-muted mb-1">Full Name</label>
+                        <input type="text" name="name" class="form-control" placeholder="John Doe" required>
+
+                        <label class="small fw-bold text-muted mb-1">Email Address</label>
+                        <input type="email" name="email" class="form-control" placeholder="name@company.com" required>
+
+                        <label class="small fw-bold text-muted mb-1">Password</label>
+                        <input type="password" name="password" class="form-control" placeholder="Min. 8 characters" required>
+
+                        <div class="form-check small mb-3">
+                            <input class="form-check-input" type="checkbox" required>
+                            <label class="form-check-label">I agree to the Terms & Privacy Policy</label>
+                        </div>
+
+                        <button type="submit" class="btn-auth">Create Account</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="text-center mt-4">
+                <p class="small text-muted">Or continue with</p>
+                <div class="social-login">
+                    <div class="social-btn">G</div>
+                    <div class="social-btn">F</div>
+                    <div class="social-btn">A</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Reports | Vitamin Deficiency Detection</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --sidebar-bg: #152036;
+            --sidebar-text: #adb5bd;
+            --top-bar-bg: #ff4d6d;
+            --bg-light: #f8f9fa;
+        }
+
+        body { font-family: 'Poppins', sans-serif; background-color: var(--bg-light); margin: 0; }
+
+        /* --- SIDEBAR --- */
+        .sidebar { width: 250px; height: 100vh; background: var(--sidebar-bg); position: fixed; z-index: 1000; }
+        .sidebar-header { padding: 30px 20px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .user-img { width: 70px; height: 70px; border-radius: 50%; border: 3px solid rgba(255,255,255,0.1); margin-bottom: 10px; }
+        .nav-link { padding: 15px 25px; color: var(--sidebar-text); display: flex; align-items: center; gap: 15px; font-size: 0.9rem; transition: 0.3s; text-decoration: none; }
+        .nav-link:hover, .nav-link.active { background: rgba(255,255,255,0.05); color: #fff; border-left: 4px solid var(--top-bar-bg); }
+
+        /* --- MAIN CONTENT --- */
+        .main-content { margin-left: 250px; }
+        .top-nav { background: var(--top-bar-bg); padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; color: white; }
+
+        .dashboard-body { padding: 40px; }
+
+        /* --- REPORT TABLE STYLING --- */
+        .report-card { background: white; border-radius: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); border: none; padding: 25px; }
+        .table thead { background: #f8f9fa; }
+        .table thead th { border: none; color: #152036; font-weight: 600; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 1px; }
+        .scan-thumb { width: 50px; height: 50px; object-fit: cover; border-radius: 8px; border: 1px solid #eee; }
+
+        .badge-deficiency { background: #fff5f5; color: #ff4d6d; border: 1px solid #ffc9c9; font-weight: 600; padding: 6px 12px; border-radius: 20px; }
+
+        /* Details Popover Style */
+        .btn-view { color: #ff4d6d; border: 1px solid #ff4d6d; background: transparent; border-radius: 20px; padding: 5px 15px; font-size: 0.8rem; transition: 0.3s; }
+        .btn-view:hover { background: #ff4d6d; color: white; }
+
+        .empty-state { text-align: center; padding: 60px; color: #adb5bd; }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar shadow">
+        <div class="sidebar-header">
+            <img src="https://ui-avatars.com/api/?name={{ user.name }}&background=ff4d6d&color=fff" class="user-img" alt="User">
+            <p class="text-white mb-0 fw-bold">{{ user.name }}</p>
+            <small class="text-success"><i class="fa fa-circle"></i> Online</small>
+        </div>
+        <nav class="mt-3">
+            <a href="{{ url_for('user_home') }}" class="nav-link">
+                <i class="fa fa-th-large"></i> Dashboard
+            </a>
+            <a href="{{ url_for('user_upload') }}" class="nav-link">
+                <i class="fa fa-cloud-upload-alt"></i> Upload Image
+            </a>
+            <a href="{{ url_for('user_reports') }}" class="nav-link active">
+                <i class="fa fa-file-medical"></i> Reports
+            </a>
+            <a href="{{ url_for('logout') }}" class="nav-link text-danger mt-5">
+                <i class="fa fa-sign-out-alt"></i> Logout
+            </a>
+        </nav>
+    </div>
+
+    <div class="main-content">
+        <div class="top-nav shadow-sm">
+            <h4 class="mb-0 fw-bold"><i class="fa fa-bars me-3"></i> Vitamin Deficiency Detection</h4>
+            <div class="d-flex align-items-center gap-3">
+                <span class="fw-medium">{{ user.name }}</span>
+            </div>
+        </div>
+
+        <div class="dashboard-body">
+            <div class="container-fluid">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h3 class="fw-bold m-0">Diagnostic History</h3>
+                    <a href="{{ url_for('user_upload') }}" class="btn btn-danger rounded-pill px-4">
+                        <i class="fa fa-plus me-2"></i> New Scan
+                    </a>
+                </div>
+
+                <div class="report-card">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead>
+                                <tr>
+                                    <th>Date & Time</th>
+                                    <th>Sample</th>
+                                    <th>Detected Condition</th>
+                                    <th>Status</th>
+                                    <th class="text-end">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for report in reports %}
+                                <tr>
+                                    <td class="text-muted small">
+                                        {{ report.created_at.strftime('%d %b, %Y') }}<br>
+                                        {{ report.created_at.strftime('%I:%M %p') }}
+                                    </td>
+                                    <td>
+                                        <img src="{{ url_for('static', filename=report.image_path) }}" class="scan-thumb" alt="Scan">
+                                    </td>
+                                    <td>
+                                        <span class="badge-deficiency">{{ report.result }}</span>
+                                    </td>
+                                    <td>
+                                        <span class="text-success small fw-bold"><i class="fa fa-check-circle me-1"></i> Verified</span>
+                                    </td>
+                                    <td class="text-end">
+                                        <button class="btn-view" data-bs-toggle="modal" data-bs-target="#reportModal{{ report.id }}">
+                                            View Details
+                                        </button>
+                                    </td>
+                                </tr>
+
+                                <div class="modal fade" id="reportModal{{ report.id }}" tabindex="-1" aria-hidden="true">
+                                    <div class="modal-dialog modal-lg modal-dialog-centered">
+                                        <div class="modal-content border-0 shadow-lg" style="border-radius: 15px;">
+                                            <div class="modal-header bg-light border-0 px-4 py-3">
+                                                <h5 class="modal-title fw-bold">Report Details - {{ report.created_at.strftime('%d %b %Y') }}</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body p-4">
+                                                <div class="row g-4">
+                                                    <div class="col-md-4 text-center">
+                                                        <img src="{{ url_for('static', filename=report.image_path) }}" class="img-fluid rounded shadow-sm mb-3">
+                                                        <h6 class="fw-bold text-danger">{{ report.result }}</h6>
+                                                    </div>
+                                                    <div class="col-md-8">
+                                                        <div class="mb-3">
+                                                            <h6 class="fw-bold"><i class="fa fa-question-circle text-primary me-2"></i> Why it happens?</h6>
+                                                            <p class="small text-muted">{{ report.cause }}</p>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <h6 class="fw-bold"><i class="fa fa-leaf text-success me-2"></i> Organic Remedy</h6>
+                                                            <p class="small text-muted">{{ report.organic_remedy }}</p>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-6">
+                                                                <h6 class="fw-bold small">Food Advice</h6>
+                                                                <p class="x-small text-muted" style="font-size: 0.8rem;">{{ report.food_items }}</p>
+                                                            </div>
+                                                            <div class="col-6">
+                                                                <h6 class="fw-bold small">Common Medicine</h6>
+                                                                <p class="x-small text-muted" style="font-size: 0.8rem;">{{ report.medicine }}</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer border-0 px-4">
+                                                <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% else %}
+                                <tr>
+                                    <td colspan="5" class="empty-state">
+                                        <i class="fa fa-folder-open fa-3x mb-3 d-block"></i>
+                                        <h5>No Reports Found</h5>
+                                        <p>You haven't performed any scans yet.</p>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

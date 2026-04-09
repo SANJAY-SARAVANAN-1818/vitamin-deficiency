@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VitScan AI | Train Dataset</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --sidebar-bg: #ffffff;
+            --sidebar-text: #555;
+            --active-teal: #00796b;
+            --bg-light: #f4f7f6;
+            --accent-pink: #ff4d6d;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-light);
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        /* Sidebar Styling (Same as Dashboard) */
+        .sidebar {
+            width: 260px;
+            height: 100vh;
+            background: var(--sidebar-bg);
+            position: fixed;
+            border-right: 1px solid #eee;
+            padding: 20px 0;
+            z-index: 1000;
+        }
+
+        .sidebar-header {
+            padding: 0 25px 25px;
+            border-bottom: 1px solid #f8f9fa;
+            margin-bottom: 20px;
+        }
+
+        .sidebar-header h4 {
+            color: var(--accent-pink);
+            font-weight: 700;
+            font-size: 1.3rem;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-link {
+            padding: 14px 25px;
+            color: var(--sidebar-text);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: 0.2s;
+        }
+
+        .nav-link:hover { background: #f8f9fa; color: var(--active-teal); }
+
+        .nav-link.active {
+            background: var(--active-teal);
+            color: white !important;
+            box-shadow: 0 4px 12px rgba(0, 121, 107, 0.2);
+        }
+
+        .main-content {
+            margin-left: 260px;
+            padding: 30px;
+            min-height: 100vh;
+        }
+
+        .top-nav {
+            background: white;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+        }
+
+        /* Training Specific Styling */
+        .upload-container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            border: 2px dashed #e2e8f0;
+            transition: 0.3s;
+        }
+
+        .upload-container:hover {
+            border-color: var(--active-teal);
+            background-color: #f0fdfa;
+        }
+
+        .btn-train-action {
+            background: var(--active-teal);
+            color: white;
+            padding: 15px 40px;
+            border-radius: 12px;
+            font-weight: 600;
+            border: none;
+            box-shadow: 0 10px 15px -3px rgba(0, 121, 107, 0.3);
+            transition: 0.3s;
+        }
+
+        .btn-train-action:hover {
+            background: #005d52;
+            transform: translateY(-2px);
+        }
+
+        /* Progress Steps */
+        .step-card {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            border-left: 5px solid var(--active-teal);
+            margin-bottom: 15px;
+        }
+
+        .logout-btn {
+            margin: 20px 25px;
+            padding: 12px;
+            color: #e74c3c;
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-top: 1px solid #f8f9fa;
+            position: absolute;
+            bottom: 0;
+            width: calc(100% - 50px);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h4>VitScan AI</h4>
+            <div class="d-flex align-items-center mt-3">
+                <i class="bi bi-person-circle fs-3 me-2 text-secondary"></i>
+                <div>
+                    <p class="mb-0 lh-1 fw-bold" style="font-size: 0.85rem;">Super Admin</p>
+                    <small class="text-success" style="font-size: 0.7rem;">● Online</small>
+                </div>
+            </div>
+        </div>
+        <nav>
+            <a href="/admin_dash" class="nav-link"><i class="bi bi-grid-1x2-fill"></i> Dashboard</a>
+            <a href="/train_dataset" class="nav-link active"><i class="bi bi-cpu-fill"></i> Train Dataset</a>
+            <a href="/user_details" class="nav-link"><i class="bi bi-people-fill"></i> User Details</a>
+            <a href="/reports" class="nav-link"><i class="bi bi-file-earmark-bar-graph-fill"></i> Reports</a>
+            <a href="/logout" class="logout-btn"><i class="bi bi-box-arrow-left"></i> Log Out</a>
+        </nav>
+    </div>
+
+    <div class="main-content">
+        <div class="top-nav">
+            <h5 class="m-0 fw-bold">Model Configuration</h5>
+            <div class="d-flex gap-3 align-items-center">
+                <div class="text-end">
+                    <p class="mb-0 fw-bold" style="font-size: 0.9rem;">CNN Trainer</p>
+                    <small class="text-muted" style="font-size: 0.75rem;">Status: Ready</small>
+                </div>
+            </div>
+        </div>
+
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-success alert-dismissible fade show rounded-4" role="alert">
+                        <i class="bi bi-check-circle-fill me-2"></i> {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="upload-container shadow-sm mb-4">
+                    <div class="mb-4">
+                        <i class="bi bi-folder-plus text-teal" style="font-size: 5rem; color: var(--active-teal);"></i>
+                    </div>
+                    <h3 class="fw-bold">Retrain CNN Model</h3>
+                    <p class="text-secondary px-md-5">Upload a <b>.zip</b> file containing labeled images for Lip and Tongue symptoms (e.g., Glossitis, Cheilitis, Normal).</p>
+
+                    <form action="/train_dataset" method="POST" enctype="multipart/form-data" class="mt-4">
+                        <div class="mb-4 text-start mx-auto" style="max-width: 400px;">
+                            <label class="form-label small fw-bold text-uppercase text-muted">Select Dataset File</label>
+                            <input type="file" name="dataset" class="form-control rounded-pill p-3 border-2" accept=".zip" required>
+                        </div>
+                        <button type="submit" class="btn-train-action">
+                            <i class="bi bi-lightning-charge-fill me-2"></i> Initialise Retraining
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <h6 class="fw-bold mb-3 text-uppercase text-muted" style="letter-spacing: 1px;">Training Protocol</h6>
+
+                <div class="step-card shadow-sm">
+                    <div class="d-flex align-items-center">
+                        <span class="badge bg-teal me-3" style="background: var(--active-teal);">1</span>
+                        <div>
+                            <p class="mb-0 fw-bold">Data Extraction</p>
+                            <small class="text-muted">Auto-unzip and label sorting.</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step-card shadow-sm">
+                    <div class="d-flex align-items-center">
+                        <span class="badge bg-teal me-3" style="background: var(--active-teal);">2</span>
+                        <div>
+                            <p class="mb-0 fw-bold">Feature Learning</p>
+                            <small class="text-muted">CNN layers identify oral lesions.</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step-card shadow-sm">
+                    <div class="d-flex align-items-center">
+                        <span class="badge bg-teal me-3" style="background: var(--active-teal);">3</span>
+                        <div>
+                            <p class="mb-0 fw-bold">Weights Update</p>
+                            <small class="text-muted">Saving <code>oral_vitscan.h5</code></small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

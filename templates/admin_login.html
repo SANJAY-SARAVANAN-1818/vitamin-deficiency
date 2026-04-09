@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Control Center | VitScan AI</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --admin-dark: #0f172a;
+            --admin-accent: #0ea5e9;
+            --form-bg: #f8fafc;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+        }
+
+        .auth-container {
+            background: #ffffff;
+            border-radius: 30px;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.4);
+            display: flex;
+            width: 1000px;
+            max-width: 95%;
+            min-height: 550px;
+            overflow: hidden;
+        }
+
+        /* Left Side - Admin Branding */
+        .auth-side-panel {
+            background: var(--admin-dark);
+            background-image: radial-gradient(circle at 20% 30%, rgba(14, 165, 233, 0.15), transparent);
+            color: white;
+            width: 40%;
+            padding: 50px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            text-align: center;
+            border-right: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .shield-logo {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 15px rgba(14, 165, 233, 0.5));
+        }
+
+        /* Right Side - Login Form */
+        .auth-form-panel {
+            width: 60%;
+            padding: 60px;
+            background: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .admin-badge {
+            display: inline-block;
+            background: rgba(14, 165, 233, 0.1);
+            color: var(--admin-accent);
+            padding: 5px 15px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+        }
+
+        .form-control {
+            border: 2px solid #f1f5f9;
+            border-radius: 15px;
+            padding: 15px 20px;
+            background: var(--form-bg);
+            margin-bottom: 20px;
+            transition: 0.3s;
+        }
+
+        .form-control:focus {
+            border-color: var(--admin-accent);
+            background: white;
+            box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.1);
+        }
+
+        .btn-admin {
+            background: var(--admin-dark);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            padding: 16px;
+            font-weight: 700;
+            width: 100%;
+            margin-top: 10px;
+            transition: 0.3s;
+            letter-spacing: 1px;
+        }
+
+        .btn-admin:hover {
+            background: var(--admin-accent);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(14, 165, 233, 0.3);
+            color: white;
+        }
+
+        .security-footer {
+            margin-top: 30px;
+            font-size: 0.75rem;
+            color: #94a3b8;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<div class="auth-container">
+    <div class="auth-side-panel d-none d-lg-flex">
+        <div class="shield-logo">🛡️</div>
+        <h2 class="fw-bold mb-3">System Console</h2>
+        <p class="text-secondary mb-5">Authorized Access Only. Manage datasets, retrain AI models, and monitor system health.</p>
+        <div class="mt-4 p-3 rounded" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05);">
+            <small class="text-info">IP Logging Enabled</small>
+        </div>
+    </div>
+
+    <div class="auth-form-panel">
+        <div class="mb-5">
+            <span class="admin-badge">Secure Entry</span>
+            <h3 class="fw-bold text-dark mb-1">Admin Login</h3>
+            <p class="text-muted">Enter your administrative credentials to continue.</p>
+        </div>
+
+        <form action="/admin_login_process" method="POST">
+            <div class="form-group mb-3">
+                <label class="small fw-bold text-secondary mb-2 ms-2">ADMINISTRATOR ID</label>
+                <input type="text" name="username" class="form-control" placeholder="admin_name" required>
+            </div>
+
+            <div class="form-group mb-4">
+                <label class="small fw-bold text-secondary mb-2 ms-2">SECURITY KEY</label>
+                <input type="password" name="password" class="form-control" placeholder="••••••••" required>
+            </div>
+
+            <button type="submit" class="btn-admin">AUTHORIZE ACCESS</button>
+
+            <div class="text-center mt-4">
+                <a href="/" class="text-decoration-none small text-muted">← Return to Public Website</a>
+            </div>
+        </form>
+
+        <div class="security-footer">
+            <p>Protected by VitScan Multi-Layer Encryption &copy; 2026</p>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

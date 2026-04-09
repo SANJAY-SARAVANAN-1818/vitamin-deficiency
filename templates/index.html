@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VitScan AI | Advanced Vitamin Deficiency Detection</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+
+    <style>
+        :root {
+            --primary-blue: #1466f4;
+            --dark-navy: #0a192f;
+            --light-bg: #f8fafc;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--light-bg);
+            color: #333;
+        }
+
+        /* Navbar Styling */
+        .navbar {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.8);
+            border-bottom: 1px solid #eee;
+        }
+
+        /* Slider / Carousel Styling */
+        .carousel-item {
+            height: 70vh;
+            min-height: 500px;
+            background: no-repeat center center scroll;
+            background-size: cover;
+        }
+        .carousel-caption {
+            bottom: 30%;
+            text-align: left;
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+        }
+        .overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to right, rgba(10, 25, 47, 0.8), rgba(0, 0, 0, 0.2));
+        }
+
+        /* Glassmorphism Cards */
+        .feature-card {
+            background: #ffffff;
+            border: none;
+            border-radius: 20px;
+            padding: 40px 30px;
+            transition: all 0.4s ease;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+        .feature-card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 20px 40px rgba(20, 102, 244, 0.15);
+            background: var(--primary-blue);
+            color: white !important;
+        }
+        .feature-card:hover .icon-box {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+        .icon-box {
+            width: 70px;
+            height: 70px;
+            background: #eef4ff;
+            color: var(--primary-blue);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            transition: 0.3s;
+        }
+
+        /* Section Titles */
+        .section-title {
+            font-weight: 700;
+            color: var(--dark-navy);
+            position: relative;
+            margin-bottom: 50px;
+        }
+        .section-title::after {
+            content: '';
+            width: 60px;
+            height: 4px;
+            background: var(--primary-blue);
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .btn-primary {
+            background-color: var(--primary-blue);
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg sticky-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold text-primary fs-3" href="#">VitScan<span class="text-dark">AI</span></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item"><a class="nav-link px-3" href="#about">About Project</a></li>
+                    <li class="nav-item"><a class="nav-link px-3" href="#features">How it Works</a></li>
+                    <li class="nav-item ms-lg-3"><a href="/login" class="btn btn-outline-primary rounded-pill px-4">Login</a></li>
+                    <li class="nav-item ms-lg-2"><a href="/admin" class="btn btn-primary rounded-pill px-4">Admin Portal</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div id="heroSlider" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active" style="background-image: url('https://images.unsplash.com/photo-1576089172869-4f5f6f315620?q=80&w=2000');">
+                <div class="overlay"></div>
+                <div class="carousel-caption animate__animated animate__fadeInUp">
+                    <h1 class="display-3 fw-bold">Advanced AI Diagnostics</h1>
+                    <p class="fs-4">Detecting Vitamin Deficiencies through Intelligent Image Processing.</p>
+                    <a href="/register" class="btn btn-primary btn-lg mt-3">Start Free Scan</a>
+                </div>
+            </div>
+            <div class="carousel-item" style="background-image: url('https://images.unsplash.com/photo-1511174511562-5f7f18b874f8?q=80&w=2000');">
+                <div class="overlay"></div>
+                <div class="carousel-caption">
+                    <h1 class="display-3 fw-bold">Deep Learning Tech</h1>
+                    <p class="fs-4">Using Convolutional Neural Networks to analyze health markers.</p>
+                    <a href="#about" class="btn btn-light btn-lg mt-3">Read Research</a>
+                </div>
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#heroSlider" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon"></span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#heroSlider" data-bs-slide="next">
+            <span class="carousel-control-next-icon"></span>
+        </button>
+    </div>
+
+    <section id="about" class="py-5 mt-5">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <h2 class="section-title text-start">Project Overview</h2>
+                    <p class="text-secondary lead">VitScan AI is a healthcare innovation designed to solve the global problem of hidden hunger. Many vitamin deficiencies show physical symptoms on the <strong>eyes, tongue, and skin</strong> before they show up in blood tests.</p>
+                    <p>Our project uses **Flask** and **Deep Learning** to create a seamless bridge between a user and a diagnosis. The Admin trains the system with thousands of medical images, and the user gets a result in under 3 seconds.</p>
+                </div>
+                <div class="col-md-6 text-center">
+                    <img src="https://cdn-icons-png.flaticon.com/512/2864/2864275.png" class="img-fluid animate__animated animate__pulse animate__infinite" width="300" alt="Health AI">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="features" class="py-5 bg-white">
+        <div class="container">
+            <h2 class="section-title text-center">How VitScan Works</h2>
+            <div class="row g-4 mt-4">
+                <div class="col-md-4">
+                    <div class="feature-card text-center h-100">
+                        <div class="icon-box mx-auto">📸</div>
+                        <h4 class="fw-bold">Image Capture</h4>
+                        <p class="text-secondary">Upload high-resolution images of eyes, skin, or nails via our secure portal.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-card text-center h-100">
+                        <div class="icon-box mx-auto">🧠</div>
+                        <h4 class="fw-bold">CNN Processing</h4>
+                        <p class="text-secondary">Our neural network extracts features and compares them against thousands of clinical samples.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-card text-center h-100">
+                        <div class="icon-box mx-auto">📊</div>
+                        <h4 class="fw-bold">Smart Reports</h4>
+                        <p class="text-secondary">Download a PDF report containing a vitality score and dietary health advice.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-dark text-white py-5">
+        <div class="container text-center">
+            <p class="mb-0">&copy; 2026 VitScan AI Healthcare Systems. Built with Python & Flask.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

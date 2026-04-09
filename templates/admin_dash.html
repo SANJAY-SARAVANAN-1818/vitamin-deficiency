@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VitScan AI | Admin Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --sidebar-bg: #ffffff;
+            --sidebar-text: #555;
+            --active-teal: #00796b;
+            --bg-light: #f4f7f6;
+            --accent-pink: #ff4d6d;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-light);
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        /* Sidebar Styling */
+        .sidebar {
+            width: 260px;
+            height: 100vh;
+            background: var(--sidebar-bg);
+            position: fixed;
+            border-right: 1px solid #eee;
+            padding: 20px 0;
+            z-index: 1000;
+            transition: all 0.3s;
+        }
+
+        .sidebar-header {
+            padding: 0 25px 25px;
+            border-bottom: 1px solid #f8f9fa;
+            margin-bottom: 20px;
+        }
+
+        .sidebar-header h4 {
+            color: var(--accent-pink);
+            font-weight: 700;
+            font-size: 1.3rem;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-link {
+            padding: 14px 25px;
+            color: var(--sidebar-text);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: 0.2s;
+        }
+
+        .nav-link i { font-size: 1.1rem; }
+
+        .nav-link:hover {
+            background: #f8f9fa;
+            color: var(--active-teal);
+        }
+
+        .nav-link.active {
+            background: var(--active-teal);
+            color: white !important;
+            box-shadow: 0 4px 12px rgba(0, 121, 107, 0.2);
+        }
+
+        .main-content {
+            margin-left: 260px;
+            padding: 30px;
+            min-height: 100vh;
+        }
+
+        /* Top Nav Bar */
+        .top-nav {
+            background: white;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+        }
+
+        /* Stat Boxes */
+        .stat-box {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+            border: 1px solid #f0f0f0;
+            transition: transform 0.3s ease;
+        }
+
+        .stat-box:hover { transform: translateY(-5px); }
+
+        .stat-info h5 {
+            color: #8e8e8e;
+            font-size: 0.85rem;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .stat-info h2 { font-weight: 700; margin: 0; color: #2d3436; }
+
+        .icon-wrapper {
+            width: 55px;
+            height: 55px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+        }
+
+        .bg-blue { background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%); }
+        .bg-green { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); }
+        .bg-orange { background: linear-gradient(135deg, #f09819 0%, #edde5d 100%); }
+        .bg-teal { background: linear-gradient(135deg, #00b09b 0%, #96c93d 100%); }
+
+        /* Data Card Table */
+        .data-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            border: 1px solid #f0f0f0;
+        }
+
+        .table thead th {
+            background-color: #f8f9fa;
+            color: #6c757d;
+            font-weight: 600;
+            font-size: 0.8rem;
+            border: none;
+            padding: 18px;
+        }
+
+        .table tbody td { padding: 18px; border-bottom: 1px solid #f8f9fa; vertical-align: middle; }
+
+        .logout-btn {
+            margin: 20px 25px;
+            padding: 12px;
+            color: #e74c3c;
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-top: 1px solid #f8f9fa;
+            position: absolute;
+            bottom: 0;
+            width: calc(100% - 50px);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h4>VitScan AI</h4>
+            <div class="d-flex align-items-center mt-3">
+                <i class="bi bi-person-circle fs-3 me-2 text-secondary"></i>
+                <div>
+                    <p class="mb-0 lh-1 fw-bold" style="font-size: 0.85rem;">Super Admin</p>
+                    <small class="text-success" style="font-size: 0.7rem;">● Online</small>
+                </div>
+            </div>
+        </div>
+        <nav>
+            <a href="/admin_dashboard" class="nav-link active"><i class="bi bi-grid-1x2-fill"></i> Dashboard</a>
+            <a href="/train_dataset" class="nav-link"><i class="bi bi-cpu-fill"></i> Train Dataset</a>
+            <a href="/user_details" class="nav-link"><i class="bi bi-people-fill"></i> User Details</a>
+            <a href="/reports" class="nav-link"><i class="bi bi-file-earmark-bar-graph-fill"></i> Reports</a>
+
+            <a href="/logout" class="logout-btn"><i class="bi bi-box-arrow-left"></i> Log Out</a>
+        </nav>
+    </div>
+
+    <div class="main-content">
+        <div class="top-nav">
+            <h5 class="m-0 fw-bold">System Overview</h5>
+            <div class="d-flex gap-3 align-items-center">
+                <div class="text-end d-none d-md-block">
+                    <p class="mb-0 fw-bold" style="font-size: 0.9rem;">Admin Console</p>
+                    <small class="text-muted" style="font-size: 0.75rem;">April 06, 2026</small>
+                </div>
+                <div class="bg-light p-2 rounded-circle border">
+                    <i class="bi bi-person-fill text-secondary"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-3">
+                <div class="stat-box">
+                    <div class="stat-info">
+                        <h5>Total Users</h5>
+                        <h2>{{ users|length }}</h2>
+                    </div>
+                    <div class="icon-wrapper bg-blue"><i class="bi bi-people"></i></div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-box">
+                    <div class="stat-info">
+                        <h5>Active Scans</h5>
+                        <h2>14</h2>
+                    </div>
+                    <div class="icon-wrapper bg-green"><i class="bi bi-activity"></i></div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-box">
+                    <div class="stat-info">
+                        <h5>Case Studies</h5>
+                        <h2>08</h2>
+                    </div>
+                    <div class="icon-wrapper bg-orange"><i class="bi bi-journal-medical"></i></div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-box">
+                    <div class="stat-info">
+                        <h5>Accuracy</h5>
+                        <h2>98%</h2>
+                    </div>
+                    <div class="icon-wrapper bg-teal"><i class="bi bi-patch-check"></i></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="data-card">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h5 class="fw-bold m-0">Recently Registered Patients</h5>
+                <button class="btn btn-sm btn-outline-primary border-0"><i class="bi bi-download me-1"></i> Export</button>
+            </div>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>User ID</th>
+                            <th>Full Name</th>
+                            <th>Email Address</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users %}
+                        <tr>
+                            <td class="fw-bold text-primary">#USR-{{ user.id }}</td>
+                            <td class="fw-medium">{{ user.name }}</td>
+                            <td class="text-muted">{{ user.email }}</td>
+                            <td><span class="badge bg-success bg-opacity-10 text-success px-3 py-2 rounded-pill" style="font-size: 0.7rem;">Active Patient</span></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

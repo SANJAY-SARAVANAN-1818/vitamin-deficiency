@@ -2,14 +2,12 @@ from flask import Flask, render_template, request, redirect, session, url_for, f
 import sqlite3
 import os
 import zipfile
-# Commented out TensorFlow imports due to Python 3.14 incompatibility
-# import tensorflow as tf
-# from tensorflow.keras.preprocessing.image import ImageDataGenerator
-# from tensorflow.keras import layers, models
-# from tensorflow.keras.models import load_model
-# from tensorflow.keras.preprocessing import image
+try:
+    import psycopg2
+    from psycopg2.extras import RealDictCursor
+except ImportError:
+    psycopg2 = None
 
-# Fallback numpy import (without tensorflow)
 try:
     import numpy as np
 except ImportError:
@@ -22,48 +20,61 @@ from sklearn.metrics import classification_report, confusion_matrix
 
 # Mock imports for Keras classes when TensorFlow is not available
 class MockImageDataGenerator:
-    """Mock ImageDataGenerator for when TensorFlow is not available"""
     def __init__(self, **kwargs):
         self.kwargs = kwargs
-    
     def flow_from_directory(self, *args, **kwargs):
-        """Return a mock generator"""
         return None
 
-# Set available names
 ImageDataGenerator = MockImageDataGenerator
 app = Flask(__name__)
 app.secret_key = "vitscan_secure_key_2026"
 app.config['UPLOAD_FOLDER'] = 'static/uploads'
-# Paths
 UPLOAD_FOLDER = 'static/uploads/datasets'
 RESULT_FOLDER = 'static/results'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 os.makedirs(RESULT_FOLDER, exist_ok=True)
 
-# --- SQLite Connection Function ---
+# --- Database Connection Function ---
 def get_db_connection():
-    try:
-        connection = sqlite3.connect('vitscan_db.sqlite')
-        connection.row_factory = sqlite3.Row
-        return connection
-    except Exception as e:
-        print(f"Error connecting to SQLite: {e}")
-        return None
+    db_url = os.getenv('DATABASE_URL')
+    
+    if db_url and psycopg2:
+        try:
+            # PostgreSQL connection for Render
+            conn = psycopg2.connect(db_url)
+            # We'll use a wrapper to make results accessible like dictionaries
+            return conn
+        except Exception as e:
+            print(f"Error connecting to PostgreSQL: {e}")
+            return None
+    else:
+        try:
+            # Local SQLite fallback
+            connection = sqlite3.connect('vitscan_db.sqlite')
+            connection.row_factory = sqlite3.Row
+            return connection
+        except Exception as e:
+            print(f"Error connecting to SQLite: {e}")
+            return None
 
 def init_db():
     conn = get_db_connection()
     if conn is None:
         return
     cursor = conn.cursor()
-    cursor.execute('''CREATE TABLE IF NOT EXISTS users (
-                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+    
+    # Check if using PostgreSQL or SQLite for specific syntax
+    is_postgres = hasattr(conn, 'cursor_factory') or (psycopg2 and isinstance(conn, psycopg2.extensions.connection))
+    id_type = "SERIAL PRIMARY KEY" if is_postgres else "INTEGER PRIMARY KEY AUTOINCREMENT"
+    
+    cursor.execute(f'''CREATE TABLE IF NOT EXISTS users (
+                        id {id_type},
                         name TEXT NOT NULL,
                         email TEXT UNIQUE NOT NULL,
                         password TEXT NOT NULL
                       )''')
-    cursor.execute('''CREATE TABLE IF NOT EXISTS reports (
-                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+    cursor.execute(f'''CREATE TABLE IF NOT EXISTS reports (
+                        id {id_type},
                         user_id INTEGER,
                         result TEXT,
                         cause TEXT,
@@ -77,7 +88,6 @@ def init_db():
     conn.commit()
     conn.close()
 
-# Initialize DB on startup
 init_db()
 
 
